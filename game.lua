@@ -104,7 +104,6 @@ function Game:draw()
         local function hudDraw() self.player.hud:draw(self) end
         self.player.hud_cam:draw(hudDraw)
     end
-    love.graphics.print("FPS " .. love.timer.getFPS())
 end
 
 function Game:quit() self:saveGameFile() end
