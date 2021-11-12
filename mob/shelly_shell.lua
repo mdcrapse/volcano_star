@@ -20,7 +20,7 @@ function ShellyShell.new(assets, x, y, xspd, yspd)
     --- The hit cooldown for each mob the shell has hit.
     self.mob_hit_cooldowns = {}
     self.spin_speed = pi * 2
-    self.can_hit_timer = 0.25
+    self.can_hit_timer = 0.5
 
     return self
 end
