@@ -68,15 +68,11 @@ function ShellyShell:tick(dt, game)
         end
     end
 
-    -- bounce off shells
+    -- kill other shells
     for mob in pairs(game.world:tagged('shelly_shell')) do
         if mob ~= self and self:isTouching(mob) then
-            local dirx, diry = Maph.normalized(self.x - mob.x, self.y - mob.y)
-            local speed = Maph.hypot(self.xspd, self.yspd)
-            self.xspd = dirx * speed
-            self.yspd = diry * speed
-            mob.xspd = -dirx * speed
-            mob.yspd = -diry * speed
+            mob:kill(game, self)
+            self:kill(game, mob)
         end
     end
 
