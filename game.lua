@@ -7,6 +7,7 @@ local World = require('world')
 local Time = require('time')
 local serpent = require('serpent')
 local TerrainGeneration = require('terrain_generation')
+local max, min, floor = math.max, math.min, math.floor
 
 local Game = {}
 Game.__index = Game
@@ -44,6 +45,11 @@ function Game.new()
 end
 
 function Game:tick(dt)
+    -- tick cam zoom scales
+    local w, h = love.graphics.getDimensions()
+    self.player.cam:setScale(max(min(floor(w / 270), floor(h / 270)), 1))
+    self.player.hud_cam:setScale(max(min(floor(w / 270), floor(h / 270)), 1))
+
     self.player.hud.w, self.player.hud.h =
         love.graphics.getWidth() / self.player.hud_cam:getScale(),
         love.graphics.getHeight() / self.player.hud_cam:getScale()
