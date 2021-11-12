@@ -47,7 +47,10 @@ function Game.new()
             file:open('w')
             file:write(data)
             file:close()
-        ]])
+        ]]),
+        --- How often the game auto saves. (every fifteen minutes)
+        save_wait = 15 * 60,
+        save_timer = 15 * 60
     }, Game)
 
     self:loadGameFile()
@@ -91,6 +94,13 @@ function Game:tick(dt)
 
     -- debug load game
     if input:isKeyPress('o') then self:loadGameFile() end
+
+    -- auto save
+    self.save_timer = max(self.save_timer - dt, 0)
+    if self.save_timer <= 0 then
+        self.save_timer = self.save_wait
+        self:saveGameFile()
+    end
 
     -- makes sure saving went okay
     local error = self.save_thread:getError()
