@@ -47,7 +47,7 @@ function Game:tick(dt)
     self.player.hud.w, self.player.hud.h =
         love.graphics.getWidth() / self.player.hud_cam:getScale(),
         love.graphics.getHeight() / self.player.hud_cam:getScale()
-    self.player.hud:tick(dt, self)
+    if self.player.is_alive then self.player.hud:tick(dt, self) end
     self.world:tick(dt, self)
     self.map:resetMobCells(self.world)
     self.music:tick(dt)
@@ -100,8 +100,10 @@ function Game:draw()
     -- self.light:endDraw()
 
     -- draw hud
-    local function hudDraw() self.player.hud:draw(self) end
-    self.player.hud_cam:draw(hudDraw)
+    if self.player.is_alive then
+        local function hudDraw() self.player.hud:draw(self) end
+        self.player.hud_cam:draw(hudDraw)
+    end
     love.graphics.print("FPS " .. love.timer.getFPS())
 end
 
