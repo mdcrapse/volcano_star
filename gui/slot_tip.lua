@@ -1,5 +1,5 @@
 local Node = require('gui.node')
-local input = input
+local input, max = input, math.max
 
 --- Displays a tip for the the specified slot.
 local SlotTip = {}
@@ -14,6 +14,16 @@ function SlotTip.new()
     self.filter_cursor = false
     self.slot = nil
     return self
+end
+
+function SlotTip:tick(dt, game)
+    Node.tick(self, dt, game)
+
+    if self.slot and self.slot.item then
+        local font = game.assets.fonts.tic_80_wide
+        self.w = max(font:getWidth(self.slot.item.name) + 1,
+                     font:getWidth(self.slot.item.desc) + 1)
+    end
 end
 
 function SlotTip:draw(game)

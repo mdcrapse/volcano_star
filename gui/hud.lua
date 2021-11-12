@@ -6,6 +6,7 @@ local PlayerPack = require('gui.player_pack')
 local BiomeTitle = require('gui.biome_title')
 local Hearts = require('gui.hearts')
 local Equipment = require('gui.equipment')
+local min = math.min
 
 local Hud = {}
 Hud.__index = Hud
@@ -64,8 +65,10 @@ function Hud:tick(dt, game)
     -- update current tooltip
     self.cur_tip = self:findTip(self)
     if self.cur_tip then
-        self.cur_tip.x = self.mouseX(game)
-        self.cur_tip.y = self.mouseY(game)
+        self.cur_tip:tick(dt, game)
+        -- moves to cursor and keeps inbounds
+        self.cur_tip.x = min(self.mouseX(game), self.w - self.cur_tip.w)
+        self.cur_tip.y = min(self.mouseY(game), self.h - self.cur_tip.h)
     end
     -- update interaction display
     self.children.interact_menu = nil
