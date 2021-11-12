@@ -82,25 +82,26 @@ function Darter:tick(dt, game)
             self.yspd = Maph.moveToward(self.yspd, MAX_SPD * in_y, ACCEL * dt)
         end
 
-        self.angle = Maph.angle(in_x, in_y)
+        if self.can_see_target then
+            self.angle = Maph.angle(self.target.x - self.x,
+                                    self.target.y - self.y)
 
-        if Maph.distance(self.x, self.y, self.target.x, self.target.y) <
-            self.shoot_dist then
-            -- shoot
-            self.shoot_timer = max(self.shoot_timer - dt, 0)
-            if self.can_see_target and self.shoot_timer <= 0 then
-                self.shoot_timer = self.shoot_wait
-                -- local dartdirx, dartdiry =
-                --     Maph.normalized(self.target.x - self.x,
-                --                     self.target.y - self.y)
-                local dartdirx, dartdiry = sin(self.angle), -cos(self.angle)
-                local dart = DarterDart.new(game.assets.sprites.darter_dart)
-                dart.x = self.x
-                dart.y = self.y
-                dart.xspd = dartdirx * self.dart_speed
-                dart.yspd = dartdiry * self.dart_speed
-                game.world:addMob(dart)
+            -- shoot target
+            if target_dist < self.shoot_dist then
+                self.shoot_timer = max(self.shoot_timer - dt, 0)
+                if self.can_see_target and self.shoot_timer <= 0 then
+                    self.shoot_timer = self.shoot_wait
+                    local dartdirx, dartdiry = sin(self.angle), -cos(self.angle)
+                    local dart = DarterDart.new(game.assets.sprites.darter_dart)
+                    dart.x = self.x
+                    dart.y = self.y
+                    dart.xspd = dartdirx * self.dart_speed
+                    dart.yspd = dartdiry * self.dart_speed
+                    game.world:addMob(dart)
+                end
             end
+        else
+            self.angle = Maph.angle(in_x, in_y)
         end
     end
 
