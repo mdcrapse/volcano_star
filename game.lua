@@ -36,7 +36,18 @@ function Game.new()
         music = music,
         map = map,
         world = world,
-        player = player
+        player = player,
+        --- Multithreaded saving.
+        save_thread = love.thread.newThread([[
+            local serpent = require('serpent')
+            local save = ...
+            local data = serpent.dump(save, {sortkeys = true})
+
+            local file = love.filesystem.newFile('save.lua')
+            file:open('w')
+            file:write(data)
+            file:close()
+        ]])
     }, Game)
 
     self:loadGameFile()
@@ -80,6 +91,10 @@ function Game:tick(dt)
 
     -- debug load game
     if input:isKeyPress('o') then self:loadGameFile() end
+
+    -- makes sure saving went okay
+    local error = self.save_thread:getError()
+    assert(not error, error)
 end
 
 function Game:draw()
@@ -111,15 +126,27 @@ function Game:draw()
     -- self.light:endDraw()
 
     -- draw hud
-    if self.player.is_alive then
-        local function hudDraw() self.player.hud:draw(self) end
-        self.player.hud_cam:draw(hudDraw)
+
+    local function hudDraw()
+        if self.player.is_alive then self.player.hud:draw(self) end
+        if self.save_thread:isRunning() then
+            love.graphics.print('saving',
+                                love.graphics.getWidth() /
+                                    self.player.hud_cam:getScale() / 2 -
+                                    love.graphics.getFont():getWidth('saving'),
+                                1)
+        end
     end
+    self.player.hud_cam:draw(hudDraw)
 
     if input:isKeyDown('f') then love.graphics.print(love.timer.getFPS()) end
 end
 
-function Game:quit() self:saveGameFile() end
+function Game:quit()
+    self:saveGameFile()
+    -- makes sure the game saves before closing
+    self.save_thread:wait()
+end
 
 --- Returns the game's save state.
 function Game:save()
@@ -170,17 +197,18 @@ end
 --- Saves the game to file.
 function Game:saveGameFile()
     local save = self:save()
-    local file = love.filesystem.newFile('save.lua')
-    file:open('w')
-    local data = serpent.dump(save, {sortkeys = true})
-    file:write(data)
+    -- makes sure the previous save is done
+    self.save_thread:wait()
+    self.save_thread:start(save)
 end
 
 --- Loads the game from file.
 function Game:loadGameFile()
+    self.save_thread:wait() -- makes sure saving is done
     local file = love.filesystem.newFile('save.lua')
     file:open('r')
     local data = file:read()
+    file:close()
     local result, save = serpent.load(data)
     self:load(save)
 end
