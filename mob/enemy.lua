@@ -22,6 +22,9 @@ function Enemy.new()
     self.hurt_knockback = 100
     --- The distance from the nearest player for the mob to despawn.
     self.despawn_dist = 480
+    --- The amount of time it takes for the mob to check if it can see the target.
+    self.can_see_wait = 0.5
+    self.can_see_timer = 0
 
     return self
 end
@@ -30,8 +33,13 @@ function Enemy:tick(dt, game)
     self:findTarget(game)
 
     if self.target then
-        self.can_see_target = game.map:isLineClear(self.x, self.y,
-                                                   self.target.x, self.target.y)
+        self.can_see_timer = max(self.can_see_timer - dt, 0)
+        if self.can_see_timer <= 0 then
+            self.can_see_timer = self.can_see_wait
+            self.can_see_target = game.map:isLineClear(self.x, self.y,
+                                                       self.target.x,
+                                                       self.target.y)
+        end
     else
         self.can_see_target = false
     end
