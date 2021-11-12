@@ -205,16 +205,15 @@ function Player:tick(dt, game)
 
     self:tickCurSlot()
     if not self.hud.is_filtering_cursor then
+        self:tickItemUse(dt, game)
         if not self.cursor_slot:isEmpty() then
             -- drop cursor slot
-            if input:isMousePress(1) then
+            if input:isMousePress(2) then
                 local item = Item.new(self.cursor_slot:take())
                 item.x = msx
                 item.y = msy
                 game.world:addMob(item)
             end
-        else
-            self:tickItemUse(dt, game)
         end
     end
     self:tickMobInteractions(game)
@@ -284,6 +283,7 @@ function Player:tickItemUse(dt, game)
 
     if self.slot_use_time <= 0 and input:isMouseDown(1) then
         local slot = self.pack.slots[self.cur_slot]
+        if not self.cursor_slot:isEmpty() then slot = self.cursor_slot end
         local item = slot.item
         if item then
             self.slot_use_time = item.use_time
