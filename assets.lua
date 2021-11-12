@@ -112,7 +112,7 @@ function Assets.new()
 
     -- items are loaded then validated, so they can reference each other
     self.items = Assets.loadGroup('item', '.lua',
-                                  function(path) return dofile(path) end)
+                                  function(path) return love.filesystem.load(path)() end)
     for id, item in pairs(self.items) do
         validateItem(item, id, self.sprites, self.items)
     end
