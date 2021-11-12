@@ -110,6 +110,8 @@ function Game:draw()
         local function hudDraw() self.player.hud:draw(self) end
         self.player.hud_cam:draw(hudDraw)
     end
+
+    if input:isKeyDown('f') then love.graphics.print(love.timer.getFPS()) end
 end
 
 function Game:quit() self:saveGameFile() end
