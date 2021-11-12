@@ -15,7 +15,7 @@ function Shelly.new(assets)
     local self = setmetatable(Enemy.new(), Shelly)
     self.sprite = assets.sprites.shelly_shelled
     self.has_shell = true
-    self.shell_speed = 150
+    self.shell_speed = 100
     self.hurt_knockback = 200
     --- The number of seconds the Shelly is safe from its own shell.
     self.shell_safe_time = 1.5
