@@ -38,7 +38,7 @@ function Player.new(assets)
     self.tags.shove = true
     self.tags.player = true
 
-    self.hurt_invincible_time = 0.5
+    self.hurt_invincible_time = 1
     self.hurt_cooldown = 0
     self.hurt_knockback = 300
 
