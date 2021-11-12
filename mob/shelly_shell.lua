@@ -40,9 +40,11 @@ function ShellyShell:tick(dt, game)
     if self:isCollision(game.map, self.x + self.xspd * dt, self.y) then
         -- x collsion
         self.xspd = -self.xspd
+        self.can_hit_timer = 0
     elseif self:isCollision(game.map, self.x, self.y + self.yspd * dt) then
         -- y collsion
         self.yspd = -self.yspd
+        self.can_hit_timer = 0
     end
 
     -- move and spin
