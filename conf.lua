@@ -1,5 +1,5 @@
 function love.conf(t)
-    t.identity = 'starfairy'
+    t.identity = 'volcano_star'
     t.modules.joystick = false
     t.modules.physics = false
     t.modules.video = false
