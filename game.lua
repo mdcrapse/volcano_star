@@ -70,6 +70,11 @@ function Game:tick(dt)
         end
     end
 
+    -- toggle fullscreen
+    if input:isKeyPress('f1') then
+        love.window.setFullscreen(not love.window.getFullscreen())
+    end
+
     -- debug save game
     if input:isKeyPress('p') then self:saveGameFile() end
 
