@@ -31,8 +31,13 @@ function Darter:kill(game, attacker)
                                    self.y, self.angle, self.xspd, self.yspd))
 
     -- drop loot
+    local item = Item.new(Pack.Slot.new(game.assets.items.arrow, random(2)))
+    item.x = self.x
+    item.y = self.y
+    game.world:addMob(item)
+
     if random(3) == 1 then
-        local item = Item.new(Pack.Slot.new(game.assets.items.arrow, random(2)))
+        local item = Item.new(Pack.Slot.new(game.assets.items.bomb, 1))
         item.x = self.x
         item.y = self.y
         game.world:addMob(item)
