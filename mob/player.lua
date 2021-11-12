@@ -154,7 +154,7 @@ function Player:tick(dt, game)
     -- if input:isKeyPress('t') then
     --     self.pack = Pack.new(30)
     --     self.cur_slot = 1
-    
+
     --     self.pack:add(Pack.Slot.new(game.assets.items.sword, 1))
     --     self.pack:add(Pack.Slot.new(game.assets.items.pickaxe, 1))
     --     self.pack:add(Pack.Slot.new(game.assets.items.shovel, 1))
@@ -421,10 +421,12 @@ function Player:tickItemUse(dt, game)
                 game.world:addMob(bomb)
                 slot:discard(1)
             elseif item.usage == 'food' then
-                self.slot_use_time = item.use_time
-                self:swingAttack(game, item)
-                self:heal(game, item.food.heals)
-                slot:discard(1)
+                if self.hp < self.max_hp then
+                    self.slot_use_time = item.use_time
+                    self:swingAttack(game, item)
+                    self:heal(game, item.food.heals)
+                    slot:discard(1)
+                end
             elseif item.usage == 'bow' then
                 self.slot_use_time = item.use_time
                 game.world:addMob(HandItem.new(item, self))
