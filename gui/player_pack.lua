@@ -29,14 +29,12 @@ end
 
 function PlayerPack:tick(dt, game)
     for name, child in pairs(self.children) do child.pack = self.player.pack end
-
     Node.tick(self, dt, game)
 end
 
 function PlayerPack:draw(game)
     for name, child in pairs(self.children) do child.pack = self.player.pack end
-
-    Node.draw(self, game)
+    for i, child in pairs(self.children) do child:draw(game) end
 end
 
 return PlayerPack
