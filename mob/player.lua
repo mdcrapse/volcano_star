@@ -286,8 +286,6 @@ function Player:tickItemUse(dt, game)
         if not self.cursor_slot:isEmpty() then slot = self.cursor_slot end
         local item = slot.item
         if item then
-            self.slot_use_time = item.use_time
-
             if item.usage == 'none' then
                 -- do nothing
             elseif item.usage == 'tile' then
