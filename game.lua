@@ -18,7 +18,7 @@ function Game.new()
     local assets = Assets.new()
     love.graphics.setFont(assets.fonts.tic_80_wide)
     local music = Music.new()
-    music:play(assets.songs.day_of_a_witch)
+    music:play(assets.songs.to_dream_in_the_desert)
     local map = Map.new(assets, 200, 200)
     local world = World.new()
     local player = Player.new(assets)
@@ -82,6 +82,13 @@ function Game:tick(dt)
                                 self.map.height * 16 / 2)
             self.world:addMob(self.player) -- player is re-added to the world
         end
+    end
+
+    -- update current song
+    if self.time.sunlight < 0.5 then
+        self.music:play(self.assets.songs.to_dream_in_the_desert)
+    else
+        self.music:play(self.assets.songs.warm_welcome)
     end
 
     -- toggle fullscreen
