@@ -8,7 +8,8 @@ function Music.new()
         source = nil, --- The emitting sound.
         next_song = nil, --- Used for smooth song transitions.
         volume = 1, --- Music volume.
-        volume_tween = 1.0, -- Used for changing songs.
+        volume_tween = 1.0, --- Used for changing songs.
+        volume_tween_time = 3, --- Number of seconds for a song transition.
         state = 'idle' --- Used for smooth song transitions.
     }, Music)
 end
@@ -44,7 +45,7 @@ function Music:tick(dt)
             self.source:setVolume(self.volume)
         end
     elseif self.state == 'ending' then
-        self.volume_tween = math.max(self.volume_tween - dt, 0)
+        self.volume_tween = math.max(self.volume_tween - dt / self.volume_tween_time, 0)
         if self.source then
             self.source:setVolume(self.volume_tween * self.volume)
         end
@@ -53,7 +54,7 @@ function Music:tick(dt)
             self:setSong(self.next_song)
         end
     elseif self.state == 'starting' then
-        self.volume_tween = math.min(self.volume_tween + dt, 1)
+        self.volume_tween = math.min(self.volume_tween + dt / self.volume_tween_time, 1)
         if self.source then
             self.source:setVolume(self.volume_tween * self.volume)
         end
